@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/core/components/crud.dart';
 import 'package:flutter_application_2/view/screen/register.dart';
 import 'package:flutter_application_2/view/widget/button.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
-
 import '../../core/constant/linkapi.dart';
 import '../widget/TextFiled.dart';
 import 'Home.dart';
@@ -16,30 +17,45 @@ class Login extends StatelessWidget {
   final TextEditingController phoneNumber = TextEditingController();
   final TextEditingController password = TextEditingController();
 
+  final storage = const FlutterSecureStorage();
+
+  Future<void> saveToken(String token) async {
+    await storage.write(key: "token", value: token);
+  }
+
   Future<void> signUp(BuildContext context) async {
     var response = await _crud.postRequest(linkelogin, {
       "phoneNumber": phoneNumber.text,
       "password": password.text,
-
     });
-
-
-
 
     if (response != null) {
       print("Response: $response");
 
       if (response['status'] == 201) {
-        if(response['data']['is_approved']==1)
-          {Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const Home()),
+        // استخراج التوكين
+        String token = response['token'];
+
+        // حفظ التوكين بشكل آمن
+        await saveToken(token);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString("userId", response["data"]["id"].toString());
+        await storage.write(key: "role", value: response["data"]["role"]);
+        // طباعة التوكين بعد الحفظ
+        print("Saved Token: ${await storage.read(key: "token")}");
+
+        // التحقق من حالة الموافقة
+        if (response['data']['is_approved'] == 1) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Home()),
                 (Route<dynamic> route) => false,
           );
-
-          }else
-            {Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const Waiting()),
-                    (Route<dynamic> route) => false);}
+        } else {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const Waiting()),
+                (Route<dynamic> route) => false,
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Login failed")),
@@ -47,7 +63,7 @@ class Login extends StatelessWidget {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("No response from server")),
+        SnackBar(content: Text("12".tr)),
       );
     }
   }
@@ -107,7 +123,7 @@ class Login extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>  register(),
+                                    builder: (context) => register(),
                                   ),
                                 );
                               },

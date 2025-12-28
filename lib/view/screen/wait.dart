@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../core/components/crud.dart';
 import '../../core/constant/linkapi.dart';
 import 'Home.dart';
@@ -19,8 +20,7 @@ class _WaitingState extends State<Waiting> {
   @override
   void initState() {
     super.initState();
-    // كل 15 دقيقة (900 ثانية)
-    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 15), (timer) {
       print("Timer fired at ${DateTime.now()}");
       checkApproval();
     });
@@ -35,9 +35,9 @@ class _WaitingState extends State<Waiting> {
 
     if (response != null) {
       if (response['data']['is_approved'] == 1) {
-        // إذا تغيرت القيمة → روح على Home
+
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const Home()),
+          MaterialPageRoute(builder: (context) =>  Home()),
               (Route<dynamic> route) => false,
         );
       }
@@ -46,7 +46,7 @@ class _WaitingState extends State<Waiting> {
 
   @override
   void dispose() {
-    _timer?.cancel(); // لازم توقف التايمر لما تترك الصفحة
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -54,7 +54,7 @@ class _WaitingState extends State<Waiting> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("حسابك بانتظار الموافقة..."),
+        child: Text("11".tr),
       ),
     );
   }

@@ -14,7 +14,16 @@ class Mylocale implements Translations
       "7":"إنشاء حساب  ",
       "8":"تملك حساب",
       "9":"إضافة صورة",
-      "10":"إضافة بطاقة"
+      "10":"إضافة بطاقة",
+      "11":"حسابك بانتظار الموافقة...",
+      "12":"خطأ في تسجيل الدخول: رقم الهاتف أو كلمة السر غير صحيحة",
+      "13":"الصفحة الرئيسية",
+      "14":"لا توجد بيانات حاليا",
+      "15":"تفاصيل الشقة",
+      "16":"إضافة شقة ",
+      "17":"Change To English",
+      "18":"تسجيل الخروج",
+      "19":"تبديل المظهر"
 
     },
 
@@ -29,7 +38,16 @@ class Mylocale implements Translations
       "7":"register",
       "8":"have Account",
       "9":"add photo",
-      "10":"add Card"
+      "10":"add Card",
+      "11":"Your account is waiting for approval....",
+      "12":"Login failed: Incorrect phone number or password",
+      "13":"Home Page",
+      "14":"No data available right now",
+      "15":"Apartment Details",
+      "16":"Add ApartmentPage",
+      "17":"تغيير للغة العربية ",
+      "18":"logout",
+      "19":"Changed Theme"
 
     }
   };
