@@ -20,7 +20,7 @@ class _WaitingState extends State<Waiting> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(minutes: 15), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       print("Timer fired at ${DateTime.now()}");
       checkApproval();
     });
@@ -29,9 +29,7 @@ class _WaitingState extends State<Waiting> {
   Future<void> checkApproval() async {
     //
 
-     var response = await _crud.postRequest(linkelogin, { "phoneNumber": "0988704367",
-     "password": "hadel98olamath",
-     }); print("CheckApproval Response: $response");
+     var response = await _crud.postRequest(linkelogin,{});
 
     if (response != null) {
       if (response['data']['is_approved'] == 1) {

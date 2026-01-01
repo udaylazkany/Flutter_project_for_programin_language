@@ -142,4 +142,62 @@ class Crud {
       return {"status": false, "message": "Connection error"};
     }
   }
+  Future<dynamic> postRequestWithFiles(
+      String url,
+      Map<String, String> data,
+      Map<String, String> filesPaths, // key = field name, value = file path
+      ) async {
+    try {
+      String? token = await storage.read(key: "token");
+
+      var request = http.MultipartRequest("POST", Uri.parse(url));
+
+      // الهيدر
+      request.headers.addAll({
+
+        if (token != null) "Authorization": "Bearer $token",
+      });
+
+      // البيانات العادية
+      data.forEach((key, value) {
+        request.fields[key] = value;
+      });
+
+      // رفع الملفات
+      for (var entry in filesPaths.entries) {
+        if (entry.value.isNotEmpty) {
+          request.files.add(
+            await http.MultipartFile.fromPath(entry.key, entry.value),
+          );
+        }
+      }
+
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      return _handleResponse(response);
+
+    } catch (e) {
+      print("POST FILES ERROR: $e");
+      return {"status": false, "message": "Connection error"};
+    }
+  }
+  ///////////
+  Future<dynamic> deleteRequest(String url) async {
+    try {
+      var response = await http
+          .delete(
+        Uri.parse(url),
+        headers: await _headers(withToken: true),
+      )
+          .timeout(const Duration(seconds: 15));
+
+      return _handleResponse(response);
+    } catch (e) {
+      print("DELETE ERROR: $e");
+      return {"status": false, "message": "Connection error"};
+    }
+  }
+
 }

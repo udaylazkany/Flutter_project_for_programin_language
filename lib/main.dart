@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import 'controller/ApartmentDetailsController.dart';
+
 import 'core/localization/locale.dart';
 import 'view/screen/onbording.dart';
-import 'view/screen/login.dart';
+
 void main() {
+  Get.put(ApartmentDetailsController());
+
+
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -22,7 +29,7 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system,
       locale: Get.deviceLocale,
       translations: Mylocale(),
-      home: Login()
+      home: OnBording()
     );
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/CountainerviewApartmentController.dart';
-import '../screen/ApartmentDetails.dart';
+import 'BookedApartmentDetails.dart';
 
-class CountainerviewApartment extends StatelessWidget {
+class CountainerviewBookedApartment extends StatelessWidget {
   final String image;
   final String city;
   final String streetName;
@@ -15,14 +15,14 @@ class CountainerviewApartment extends StatelessWidget {
   final int apartmentId;
   final String tenantId;
 
-
+  // 🔹 الإضافات الجديدة
   final String statusApartments;
-  final String ownerId;
-  final String adressId;
+  final String ownerName;
+  final String locationName;
   final String createdAt;
   final String updatedAt;
 
-  const CountainerviewApartment({
+   CountainerviewBookedApartment({
     super.key,
     required this.apartmentId,
     required this.image,
@@ -35,15 +35,16 @@ class CountainerviewApartment extends StatelessWidget {
     required this.space,
     required this.tenantId,
     required this.statusApartments,
-    required this.ownerId,
-    required this.adressId,
+    required this.ownerName,
+    required this.locationName,
     required this.createdAt,
     required this.updatedAt,
   });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CountainerviewApartmentController());
+    final controller = Get.find<CountainerviewApartmentController>();
+
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.loadApartmentStatus(apartmentId);
@@ -52,7 +53,7 @@ class CountainerviewApartment extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding:  EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -64,7 +65,7 @@ class CountainerviewApartment extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => ApartmentDetails(
+                    builder: (_) => BookedApartmentDetails(
                       apartmentId: apartmentId,
                       image: image,
                       city: city,
@@ -74,15 +75,18 @@ class CountainerviewApartment extends StatelessWidget {
                       apartmentNumber: apartmentNumber,
                       price: price,
                       space: space,
-                      ownerId: ownerId,
-
+                      statusApartments: statusApartments,
+                      ownerName: ownerName,
+                      locationName: locationName,
+                      createdAt: createdAt,
+                      updatedAt: updatedAt,
                     ),
                   ),
                 ).then((_) {
 
                   controller.loadApartmentStatus(apartmentId);
                 });
-                ;
+
               },
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.zero,
@@ -112,12 +116,13 @@ class CountainerviewApartment extends StatelessWidget {
             ),
           ),
 
+
           Obx(() {
             final status =
                 controller.apartmentsStatus[apartmentId] ?? "loading";
 
             return Container(
-              padding:  EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.6),
                 borderRadius: BorderRadius.circular(30),

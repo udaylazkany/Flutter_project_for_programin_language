@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'login.dart';
 
 class OnBording extends StatefulWidget {
-  const OnBording({super.key});
+   OnBording({super.key});
 
   @override
   State<OnBording> createState() => _OnBordingState();
@@ -14,7 +14,7 @@ class _OnBordingState extends State<OnBording> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 30), () {
+    Future.delayed(const Duration(seconds: 10), () {
       Get.off(() =>  Login());
     });
   }
